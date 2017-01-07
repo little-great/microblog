@@ -10,11 +10,11 @@
 </head>
 <body>
 
-<img src="/images/danny.jpg" id="target" alt="[Jcrop Example]"/>
+<img src="/avatar/<%=avatar%>" id="target" alt="[Jcrop Example]"/>
 
 <div id="preview-pane">
     <div class="preview-container">
-        <img src="/images/danny.jpg" class="jcrop-preview" alt="Preview"/>
+        <img src="/avatar/<%=avatar%>" class="jcrop-preview" alt="Preview"/>
     </div>
 </div>
 
@@ -34,7 +34,12 @@
             "x" : x,
             "y" : y
         },function(result){
-            alert(result);
+            if(result == '-1'){
+                alert('剪裁失败');
+            }else{
+                alert('剪裁成功');
+                window.location.href = '/';
+            }
         });
     });
 </script>
