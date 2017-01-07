@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>microblog</title>
+
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .box{
+            margin-top:  50px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container box">
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top"  role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">班级说说</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">全部说说</a></li>
+                    <li><a href="#">我的说说</a></li>
+                    <li><a href="#">成员列表</a></li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">欢迎注册</a></li>
+                    <li><a href="#">设置个人资料</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <h1>欢迎注册！</h1>
+
+    <form role="form">
+        <div class="form-group">
+            <label for="exampleInputEmail1">用户名</label>
+            <input type="text" class="form-control"  id="input1" placeholder="用户名可以是中文但不能和别人重复">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">密码</label>
+            <input type="password" class="form-control"  id="input2" placeholder="密码至少六位">
+        </div>
+        <div class="checkbox">
+                <label>
+                    <input type="checkbox"> 我遵守注册规定
+                </label>
+            </div>
+
+           
+    </form>
+    
+    <button type="button" id="zhuce" class="btn btn-default" >注册</button>
+    <div class="alert alert-danger" role="alert" id='mistake' style="display:none">用户名被占用请更换</div>
+
+
+</div>
+<script type="text/javascript">
+$('input').focus(function(event) {
+    /* Act on the event */
+    $('#mistake').fadeOut();
+});
+
+    $('#zhuce').click(function(event) {
+        /* Act on the event */
+    $.post('/doregist', { 
+        username : $('#input1').val(),
+        password : $('#input2').val()
+    }, function(result) {
+        if(result == '-3'){
+            //服务器错误
+            console.log('服务器错误');
+        }else if( result == 1){
+            alert('注册成功，将要跳转到首页')
+            window.location.href = "/" ;
+        }else if(result == '-1'){
+            $('#mistake').fadeIn();
+        }
+    });
+
+    });
+    
+
+
+
+
+
+</script>
+
+</body>
+</html>
