@@ -97,6 +97,16 @@ exports.getCount = function (collectionName,json,callback) {
     })
 }
 
+exports.getAllCount = function (collectionName ,callback) {
+    _connectDB(function (err,db) {
+        db.collection(collectionName).count({}).then(function (count) {
+            callback(count);
+            db.close();
+        })
+    })
+
+}
+
 function init() {
     _connectDB(function (err,db) {
         if(err){

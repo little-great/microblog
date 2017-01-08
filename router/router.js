@@ -90,6 +90,10 @@ exports.doregist = function (req,res,next) {
 
 //显示登录页面
 exports.showLogin = function (req,res,next) {
+    if(req.session.login == '1'){
+        res.send('您已经登录');
+        return;
+    }
     res.render('login');
 }
 
@@ -214,13 +218,54 @@ exports.dopost = function (req,res,next) {
             res.send("1"); //发表成功
         })
 };
-
+//获取数据库中所有的评论
 exports.getAllshuoshuo = function (req,res,next) {
-    db.find('posts',{},{'pagemount':10,'page': req.query.page,'sort':{'datetime' : -1 }},function (err,result) {
+    db.find('posts',{},{'pagemount':20,'page': req.query.page,'sort':{'datetime' : -1 }},function (err,result) {
         if(err){
             console.log(err);
             return;
         }
         res.json(result);
+    })
+};
+
+exports.getCount = function (req,res,next) {
+    db.getAllCount('posts',function (count) {
+        res.send(count.toString());
+    })
+};
+
+exports.showUser = function (req,res,next) {
+    var user = req.params['user'];
+
+    if(req.session.login == false){
+        req.send('您尚未登录');
+        return;
+    }
+    db.find('posts',{'username' : user},function (err,result) {
+        if(err){
+            console.log(err);
+            return;
+        }
+
+        res.render('user',{
+            'content' : result,
+            'username': req.session.username,
+            'avatar'  : req.session.username +'.jpg'
+        });
+    })
+
+
+};
+
+exports.showUserlist = function (req,res,next) {
+    db.find('users',{},function (err,result) {
+        if(err){
+            console.log(err);
+        }
+        res.render('userlist',{
+            'results' : result,
+            'username': req.session.username
+        })
     })
 }

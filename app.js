@@ -33,5 +33,8 @@ app.get('/cut',router.showCut);                         //显示剪裁页面
 app.get('/docut',router.docut);                         //执行剪裁
 app.post('/release',router.dopost);                     //发表说说
 app.get('/getAllshuoshuo',router.getAllshuoshuo);       //获得数据库中所有说说
+app.get('/getCount',router.getCount);                   //获取评论总数，制作分页功能
+app.get("/user/:user",router.showUser);                 //显示用户所有说说
+app.get('/userlist',router.showUserlist)                //显示所有用户
 
 app.listen(5000);

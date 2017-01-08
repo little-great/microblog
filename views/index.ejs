@@ -28,7 +28,15 @@
             new Vue({
                 el: '#box',
                 data: {
-                    myData: []
+                    myData: [],
+                    allCount:[]
+                },
+                methods:{
+                    fenYe:function (num) {
+                        this.$http.get('/getAllshuoshuo?page=' + num).then(function(response){
+                            this.myData = response.data;
+                        })
+                    }
                 },
                 computed:{
                     myData2:function () {
@@ -42,9 +50,22 @@
                 },
                 ready: function(){
                     // 等同于jquery的$.ajax
+                    //获取所有说说的总数
+                    this.$http.get('/getCount').then(function (response) {
+                        //alert(response.data);
+                        //
+                        for(var i= 0;i<=parseInt(response.data)/20;i++){
+                            this.allCount.push(i);
+                        }
 
+                    })
+
+                    $("#aaa:first").addClass("active");
+
+                    //得到所有的说说内容
                     this.$http.get('/getAllshuoshuo?page=0').then(function(response){
                         this.myData = response.data;
+                        //alert(this.allCount);
                     })
                 }
             });
@@ -52,7 +73,7 @@
         }
     </script>
 </head>
-<body>
+<body id="box" v-cloak>
 <div class="container box">
 <nav class="navbar navbar-default navbar-inverse navbar-fixed-top"  role="navigation">
     <div class="container-fluid">
@@ -70,14 +91,18 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">全部说说</a></li>
-                <li><a href="#">我的说说</a></li>
-                <li><a href="#">成员列表</a></li>
+                <li class="active"><a href="/">全部说说</a></li>
+                <li><a href="/user/<%=username %>">我的说说</a></li>
+                <li><a href="/userlist">成员列表</a></li>
 
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
+                <% if(!login){%>
                 <li><a href="regist">注册</a></li>
+                <%}else{%>
+                <li><a href="regist">欢迎您<%=username %></a></li>
+                <%}%>
                 <li><a href="login">登录</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -115,10 +140,14 @@
     </div>
 
     <% } %>
-    <div class="container" id="box" v-cloak>
+
+    <div class="container" >
         <div class="row" >
             <div class="col-xs-6 col-md-3" v-for="item in myData2">
-                   <h2><img width="50px" :src="item.avatar" >{{ item.username }}说</h2>
+                   <h2><img width="50px" :src="item.avatar" ></h2>
+                <div>
+                    {{ item.datetime }}
+                </div>
                 <div>
                     {{ item.content }}
                 </div>
@@ -127,6 +156,11 @@
 
         </div>
     </div>
+    <nav>
+        <ul class="pagination" id="aaa">
+            <li @click="fenYe(item)" v-for=" item in allCount"><a>{{ item + 1 }}</a></li>
+        </ul>
+    </nav>
 </div>
 <script>
 
@@ -160,6 +194,10 @@
     });
 
     $('#fabiao').click(function () {
+        if($('#content').val() == ''){
+            alert('说说不能为空');
+            return;
+        }
         $.post('/release',{
             content : $('#content').val()
         },function (result) {

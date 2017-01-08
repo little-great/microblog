@@ -81,6 +81,14 @@
 
     $('#zhuce').click(function(event) {
         /* Act on the event */
+        if($('#input1').val() == ''){
+            alert('用户名不能为空');
+            return;
+        }
+        if($('#input2').val() == ''){
+                    alert('密码不能为空');
+                    return;
+                }
         $.post('/doregist', {
             username : $('#input1').val(),
             password : $('#input2').val()
