@@ -7,6 +7,7 @@ var md5 = require('../model/md5');
 var gm =require('gm');
 var fs =require('fs');
 var fm = require('formidable');
+var time = require('../model/date');
 exports.showIndex = function (req,res,next) {
     if(req.session.login == 1){
         var login = true;
@@ -185,5 +186,41 @@ exports.docut = function (req,res,next) {
             }
             res.send('1');
         })
+    })
+};
+
+//发表说说
+exports.dopost = function (req,res,next) {
+    //console.log(req.body.username);
+    //必须保证登陆
+    if (req.session.login != "1") {
+        res.end("非法闯入，这个页面要求登陆！");
+        return;
+    }
+
+    //插入数据
+    var time2 = time()
+    db.insertOne('posts', {
+            'username': req.session.username,
+            'content': req.body.content,
+            'datetime': time2
+        },
+        function (err, result) {
+            if (err) {
+                //服务器错误
+                res.send('-3');
+                return;
+            }
+            res.send("1"); //发表成功
+        })
+};
+
+exports.getAllshuoshuo = function (req,res,next) {
+    db.find('posts',{},{'pagemount':10,'page': req.query.page,'sort':{'datetime' : -1 }},function (err,result) {
+        if(err){
+            console.log(err);
+            return;
+        }
+        res.json(result);
     })
 }

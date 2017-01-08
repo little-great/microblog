@@ -35,7 +35,7 @@ exports.find = function (collectionName, json , C , D ) {
         var skipNumber = 0;
         var limit = 0;
     }else if(arguments.length == 4){
-        var agrs = C;
+        var args = C;
         var callback = D ;
         var skipNumber = args.pagemount * args.page || 0;
         var limit = args.pagemount || 0;
@@ -97,5 +97,24 @@ exports.getCount = function (collectionName,json,callback) {
     })
 }
 
+function init() {
+    _connectDB(function (err,db) {
+        if(err){
+            console.log(err);
+            return;
+        }
+        db.collection('users').createIndex(
+            {'username':1},
+            null,
+            function (err,results) {
+                if(err){
+                    console.log(err);
+                }
+                console.log('索引建立成功');
+            })
+    })
+}
+
+init();
 
 

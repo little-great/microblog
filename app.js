@@ -22,14 +22,16 @@ app.use('/avatar', express.static('./avatar'));
 
 
 //路由表
-app.get('/',router.showIndex);
-app.get('/cut',router.showCut);
-app.get('/docut',router.docut);
-app.get('/regist',router.showRegist);
-app.post('/doregist',router.doregist);
-app.get('/login',router.showLogin);
-app.post('/dologin',router.dologin);
-app.get('/setavatar',router.showSetavatar);
-app.post('/dosetavatar',router.dosetavatar);
+app.get('/',router.showIndex);                          //显示首页
+app.get('/regist',router.showRegist);                   //显示注册页面
+app.post('/doregist',router.doregist);                  //执行注册
+app.get('/login',router.showLogin);                     //显示登录页面
+app.post('/dologin',router.dologin);                    //执行登录
+app.get('/setavatar',router.showSetavatar);             //显示上传头像页面
+app.post('/dosetavatar',router.dosetavatar);            //执行上传头像操作
+app.get('/cut',router.showCut);                         //显示剪裁页面
+app.get('/docut',router.docut);                         //执行剪裁
+app.post('/release',router.dopost);                     //发表说说
+app.get('/getAllshuoshuo',router.getAllshuoshuo);       //获得数据库中所有说说
 
 app.listen(5000);
